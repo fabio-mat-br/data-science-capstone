@@ -1,26 +1,24 @@
-#
-# This is the server logic of a Shiny web application. You can run the 
-# application by clicking 'Run App' above.
-#
-# Find out more about building applications with Shiny here:
-# 
-#    http://shiny.rstudio.com/
-#
+require(shiny)
+require(ggvis)
+require(magrittr)
+library(qdap)
+library(tm)
+library(SnowballC)
+library(dplyr)
+library(plyr)
+library(stringr)
+require(markdown)
 
-library(shiny)
+options("scipen" = 99, "digits" = 9)
+source("functions.R")
+
+dataLoaded <- FALSE
 
 # Define server logic required to draw a histogram
-shinyServer(function(input, output) {
-   
-  output$distPlot <- renderPlot({
-    
-    # generate bins based on input$bins from ui.R
-    x    <- faithful[, 2] 
-    bins <- seq(min(x), max(x), length.out = input$bins + 1)
-    
-    # draw the histogram with the specified number of bins
-    hist(x, breaks = bins, col = 'darkgray', border = 'white')
-    
+shinyServer(function(input, output, session) {
+  observe({
+    output$vbtConsole <- renderPrint(
+      predict_n_grams(input$txtSentence)
+    )
   })
-  
 })
