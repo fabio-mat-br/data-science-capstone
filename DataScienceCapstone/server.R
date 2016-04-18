@@ -16,9 +16,13 @@ dataLoaded <- FALSE
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output, session) {
+  resultNGram <- NULL
   observe({
     output$vbtConsole <- renderPrint(
-      predict_n_grams(input$txtSentence)
+      resultNGram <- predict_n_grams(input$txtSentence)
     )
+    output$btnFirst <- renderUI({
+      actionButton("btnFirst", label = resultNGram[1]$pred)
+    })
   })
 })

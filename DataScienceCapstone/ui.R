@@ -23,7 +23,10 @@ shinyUI(fluidPage(
     
     # Show a plot of the generated distribution
     mainPanel(
-      verbatimTextOutput("vbtConsole")
+      verbatimTextOutput("vbtConsole"),
+      h3("First option"),
+      uiOutput("btnFirst")
+      
       
     )
   )

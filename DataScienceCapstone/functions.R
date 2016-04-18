@@ -33,13 +33,21 @@ predict_n_grams <- function(text) {
 
 predict_based_in_ngram <- function(ng){
   ng_length = length(ng[[1]])
-  pred_words <- load_n_grams(ng_length + 1)
-  wd_names <-c("w1", "w2", "w3", "w4")
-  for(i in 1:ng_length){
-    pred_words <- pred_words[ng]
+  if(ng_length > 3) {
+    ng[[1]] <- ng[[1]][(ng_length - 3 + 1):ng_length]
+    ng_length <- 3
   }
-  result_words <- pred_words[order(pred_words$freq, decreasing=T),]
-  return(result_words)
+  pred_words <- load_n_grams(ng_length + 1)
+  wd_names <-c("w1", "w2", "w3")
+  for(i in 1:ng_length){
+    pred_words <- pred_words[which(pred_words[[(wd_names[i])]] == ng[[1]][i]), ]
+  }
+  result_words <- head(pred_words[order(pred_words$freq, decreasing = TRUE),]) #$pred
+  if(dim(result_words)[1] == 0) {
+    return(start_predict())
+  } else {
+    return(result_words)
+  }
 }
 
 start_predict <- function(variables) {
@@ -60,6 +68,3 @@ load_n_grams <- function(i){
     return(readRDS("data/quadrigrams.RDS"))
   }
 }
-wd_names <-c("w1", "w2", "w3", "w4")
-eval(wd_names[1])
-bb <- a[which(a[[(wd_names[1])]] == "i"),]
